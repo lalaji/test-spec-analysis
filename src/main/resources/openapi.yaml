@@ -30,6 +30,8 @@ tags:
   name: Authorize
 - description: APIs for handling accelerator errors
   name: Error Handling
+- description: APIs for card accounts and transactions (Berlin Group Compliance)
+  name: Card Accounts
 paths:
   /map-accelerator-error-response:
     post:
@@ -87,6 +89,123 @@ paths:
       - application/json
       x-tags:
       - tag: Error Handling
+  /v1/card-accounts/{account-id}/transactions:
+    get:
+      operationId: getCardAccountTransactions
+      summary: Read card account transaction list
+      description: Retrieve transaction list for a specific card account. This endpoint supports the Berlin Group specification requirement for accessing card account transaction data.
+      tags:
+      - Card Accounts
+      parameters:
+      - name: account-id
+        in: path
+        description: The identifier of the card account
+        required: true
+        schema:
+          type: string
+          example: "3dc3d5b3-7023-4848-9853-f5400a64e80f"
+      - name: dateFrom
+        in: query
+        description: Starting date for transactions (YYYY-MM-DD format)
+        required: false
+        schema:
+          type: string
+          format: date
+          example: "2024-01-01"
+      - name: dateTo
+        in: query
+        description: End date for transactions (YYYY-MM-DD format)
+        required: false
+        schema:
+          type: string
+          format: date
+          example: "2024-12-31"
+      - name: bookingStatus
+        in: query
+        description: Filter transactions by booking status
+        required: false
+        schema:
+          type: string
+          enum: [booked, pending, both]
+          default: both
+      responses:
+        "200":
+          description: Successful response with card account transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardAccountTransactionsResponse"
+              example:
+                cardAccountId: "3dc3d5b3-7023-4848-9853-f5400a64e80f"
+                transactions:
+                  booked:
+                  - transactionId: "1234567890"
+                    transactionAmount:
+                      currency: "EUR"
+                      amount: "256.67"
+                    bookingDate: "2024-01-15"
+                    valueDate: "2024-01-15"
+                    creditorName: "John Miles"
+                    merchantCategoryCode: "5411"
+                    transactionDetails: "Grocery Store Purchase"
+                  pending:
+                  - transactionId: "0987654321"
+                    transactionAmount:
+                      currency: "EUR"
+                      amount: "100.00"
+                    merchantCategoryCode: "5812"
+                    transactionDetails: "Restaurant"
+        "400":
+          description: Bad Request - Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                responseId: "Ec1wMjmiG8"
+                status: ERROR
+                data:
+                  errorMessage: Bad request
+                  errorDescription: Invalid account ID format
+        "401":
+          description: Unauthorized - Invalid or missing credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found - Card account not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                responseId: "Ec1wMjmiG8"
+                status: ERROR
+                data:
+                  errorMessage: Not found
+                  errorDescription: Card account with specified ID does not exist
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                responseId: "Ec1wMjmiG8"
+                status: ERROR
+                data:
+                  errorMessage: Internal server error
+                  errorDescription: Failed to retrieve transactions
+      security:
+      - OAuth2: []
+      - BasicAuth: []
   /pre-process-client-creation:
     post:
       requestBody:
@@ -3801,6 +3920,95 @@ components:
       required:
       - accounts
       type: object
+    CardAccountTransactionsResponse:
+      description: Response containing card account transactions
+      type: object
+      properties:
+        cardAccountId:
+          type: string
+          description: The unique identifier of the card account
+          example: "3dc3d5b3-7023-4848-9853-f5400a64e80f"
+        transactions:
+          $ref: "#/components/schemas/CardTransactionList"
+      required:
+      - cardAccountId
+      - transactions
+    CardTransactionList:
+      description: List of card transactions categorized by status
+      type: object
+      properties:
+        booked:
+          type: array
+          description: List of booked transactions
+          items:
+            $ref: "#/components/schemas/CardTransaction"
+        pending:
+          type: array
+          description: List of pending transactions
+          items:
+            $ref: "#/components/schemas/CardTransaction"
+    CardTransaction:
+      description: Details of a single card transaction
+      type: object
+      required:
+      - transactionId
+      - transactionAmount
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier for the transaction
+          example: "1234567890"
+        transactionAmount:
+          $ref: "#/components/schemas/Amount"
+        bookingDate:
+          type: string
+          format: date
+          description: Date when the transaction was booked
+          example: "2024-01-15"
+        valueDate:
+          type: string
+          format: date
+          description: The value date of the transaction
+          example: "2024-01-15"
+        creditorName:
+          type: string
+          description: Name of the creditor
+          example: "John Miles"
+        debtorName:
+          type: string
+          description: Name of the debtor
+          example: "Alice Smith"
+        merchantCategoryCode:
+          type: string
+          description: Merchant category code for the transaction
+          example: "5411"
+        transactionDetails:
+          type: string
+          description: Additional details about the transaction
+          example: "Grocery Store Purchase"
+        proprietaryBankTransactionCode:
+          type: string
+          description: Proprietary bank transaction code
+        remittanceInformationUnstructured:
+          type: string
+          description: Unstructured remittance information
+    Amount:
+      description: Transaction amount with currency
+      type: object
+      required:
+      - currency
+      - amount
+      properties:
+        currency:
+          type: string
+          description: ISO 4217 currency code
+          example: "EUR"
+          pattern: "^[A-Z]{3}$"
+        amount:
+          type: string
+          description: Transaction amount as a decimal string
+          example: "256.67"
+          pattern: "^-?[0-9]{1,14}(\\.[0-9]{1,5})?$"
   securitySchemes:
     BasicAuth:
       scheme: basic
