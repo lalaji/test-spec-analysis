@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>MSG-20240101-002</MsgId>
+      <CreDtTm>2024-01-01T10:00:00</CreDtTm>
+      <NbOfTxs>2</NbOfTxs>
+      <CtrlSum>3750.50</CtrlSum>
+      <InitgPty>
+        <Nm>Multi Payment Corp</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>PMT-BATCH-001</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <ReqdExctnDt>2024-01-03</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Multi Payment Corp</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013000</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>COBADEFFXXX</BIC>
+        </FinInstnId>
+      </DbtrAgt>
+      <CdtTrfTxInf>
+        <PmtId>
+          <EndToEndId>E2E-TXN-001</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="EUR">2500.25</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>BNPAFRPPXXX</BIC>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>First Creditor Ltd</Nm>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>FR7630006000011234567890189</IBAN>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Invoice INV-001</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <EndToEndId>E2E-TXN-002</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="EUR">1250.25</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>SOGEDEFFXXX</BIC>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Second Creditor Inc</Nm>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>FR1420041010050500013M02606</IBAN>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Invoice INV-002</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>

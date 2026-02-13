@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This XML is INVALID - missing required CreDtTm element -->
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>MSG-INVALID-001</MsgId>
+      <!-- CreDtTm is missing - this is a mandatory field -->
+      <NbOfTxs>1</NbOfTxs>
+      <InitgPty>
+        <Nm>Invalid Corp</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>PMT-INVALID-001</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <ReqdExctnDt>2024-01-02</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Invalid Corp</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>DE89370400440532013000</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>COBADEFFXXX</BIC>
+        </FinInstnId>
+      </DbtrAgt>
+      <CdtTrfTxInf>
+        <PmtId>
+          <EndToEndId>E2E-INVALID-001</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="EUR">100.00</InstdAmt>
+        </Amt>
+        <Cdtr>
+          <Nm>Creditor Name</Nm>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>FR1420041010050500013M02606</IBAN>
+          </Id>
+        </CdtrAcct>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>
