@@ -19,6 +19,7 @@
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/ValidateAuthorizationRequestApiController.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/EnrichConsentFileResponseApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessConsentRevokeApiController.java
+/home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/UpdatePaymentAuthorisationApiController.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessConsentCreationApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/OpenApiGeneratorApplication.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessClientUpdateApiController.java
@@ -26,6 +27,7 @@
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessClientRetrievalApiController.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessConsentFileUploadApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessConsentRetrievalApi.java
+/home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/UpdatePaymentAuthorisationApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessClientCreationApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/model/SuccessResponseUpdatePaymentAuthorisation.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessClientRetrievalApi.java
@@ -48,7 +50,9 @@
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessClientCreationApiController.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PopulateConsentAuthorizeScreenApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/PreProcessApplicationUpdateApi.java
+/home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/model/StatusEnum.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/MapAcceleratorErrorResponseApiController.java
+/home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/model/ErrorStatusEnum.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/model/SuccessResponseUpdatePaymentAuthorisationData.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/IssueRefreshTokenApi.java
 /home/runner/work/test-spec-analysis/test-spec-analysis/src/main/java/org/openapitools/api/ValidateConsentFileRetrievalApi.java
