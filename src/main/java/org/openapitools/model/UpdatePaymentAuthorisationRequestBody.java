@@ -38,7 +38,7 @@ public class UpdatePaymentAuthorisationRequestBody {
     return this;
   }
 
-  @Schema(description = "Payment authorization update data with authentication information")
+  @Schema(description = "Payment authorisation update data with authentication information")
   @NotNull
   @Valid
   public UpdatePaymentAuthorisationData getData() {
