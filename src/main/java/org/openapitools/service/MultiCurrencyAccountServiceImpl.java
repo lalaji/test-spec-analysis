@@ -109,6 +109,9 @@ public class MultiCurrencyAccountServiceImpl implements MultiCurrencyAccountServ
 
     @Override
     public boolean isValidIban(String iban) {
+        // Note: This implementation validates IBAN format only (ISO 13616 structure).
+        // It does not perform checksum validation. For production use, consider
+        // implementing full ISO 13616 checksum validation using mod-97 algorithm.
         return iban != null && IBAN_PATTERN.matcher(iban).matches();
     }
 
