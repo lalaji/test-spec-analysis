@@ -1,0 +1,31 @@
+name: Auto-add Copilot as PR Reviewer
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  add-copilot-reviewer:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Add copilot-swe-agent as reviewer
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                reviewers: ['copilot-swe-agent[bot]']
+              });
+              
+              console.log(`Added copilot-swe-agent[bot] as reviewer to PR #${context.payload.pull_request.number}`);
+            } catch (error) {
+              console.log('Note: copilot-swe-agent[bot] may already be a reviewer or not available');
+              console.log(error.message);
+            }
