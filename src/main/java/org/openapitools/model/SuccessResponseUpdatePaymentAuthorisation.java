@@ -26,7 +26,7 @@ public class SuccessResponseUpdatePaymentAuthorisation {
     return this;
   }
 
-  @Schema(description = "")
+  @Schema(description = "Unique identifier for this response")
   @NotNull
   public String getResponseId() {
     return responseId;
@@ -41,7 +41,7 @@ public class SuccessResponseUpdatePaymentAuthorisation {
     return this;
   }
 
-  @Schema(description = "")
+  @Schema(description = "Status of the operation, must be SUCCESS for successful responses")
   @NotNull
   public StatusEnum getStatus() {
     return status;
@@ -56,7 +56,7 @@ public class SuccessResponseUpdatePaymentAuthorisation {
     return this;
   }
 
-  @Schema(description = "")
+  @Schema(description = "Payment authorization update data containing SCA status and authorization ID")
   @NotNull
   @Valid
   public SuccessResponseUpdatePaymentAuthorisationData getData() {

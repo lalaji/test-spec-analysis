@@ -29,7 +29,7 @@ public class FailedResponse {
     return this;
   }
 
-  @Schema(description = "")
+  @Schema(description = "Unique identifier for this response")
   @NotNull
   public String getResponseId() {
     return responseId;
