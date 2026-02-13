@@ -37,28 +37,40 @@ public class PSUGeoLocationInterceptor implements HandlerInterceptor {
             // For signing basket requests, the header is SHOULD (recommended) not MUST
             boolean isSigningBasket = isSigningBasketRequest(requestPath);
             
-            if (isSigningBasket) {
-                // For signing basket, validate only if provided
-                if (!validator.validateSigningBasketHeader(psuGeoLocation)) {
-                    logger.warn("Invalid PSU-GEO-Location header in signing basket request: {}", 
-                            validator.getValidationErrorMessage(psuGeoLocation));
-                    sendErrorResponse(response, 400, 
-                            validator.getValidationErrorMessage(psuGeoLocation));
-                    return false;
-                }
-            } else {
-                // For other consent operations, validate strictly
-                try {
-                    validator.validateHeader(psuGeoLocation);
-                } catch (IllegalArgumentException e) {
-                    logger.warn("Invalid PSU-GEO-Location header: {}", e.getMessage());
-                    sendErrorResponse(response, 400, e.getMessage());
-                    return false;
-                }
+            // Validate header based on requirement type
+            String validationError = validatePSUGeoLocation(psuGeoLocation, isSigningBasket);
+            if (validationError != null) {
+                logger.warn("Invalid PSU-GEO-Location header: {}", validationError);
+                sendErrorResponse(response, 400, validationError);
+                return false;
             }
         }
         
         return true;
+    }
+    
+    /**
+     * Validates the PSU-GEO-Location header based on requirement type.
+     * 
+     * @param psuGeoLocation the header value
+     * @param isSigningBasket true if this is a signing basket request (SHOULD requirement)
+     * @return error message if validation fails, null if valid
+     */
+    private String validatePSUGeoLocation(String psuGeoLocation, boolean isSigningBasket) {
+        if (isSigningBasket) {
+            // For signing basket, validate only if provided (SHOULD requirement)
+            if (!validator.validateSigningBasketHeader(psuGeoLocation)) {
+                return validator.getValidationErrorMessage(psuGeoLocation);
+            }
+        } else {
+            // For other consent operations, validate strictly (MUST requirement)
+            try {
+                validator.validateHeader(psuGeoLocation);
+            } catch (IllegalArgumentException e) {
+                return e.getMessage();
+            }
+        }
+        return null;
     }
     
     /**

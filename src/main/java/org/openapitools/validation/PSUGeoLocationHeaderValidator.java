@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 public class PSUGeoLocationHeaderValidator {
     
     /**
-     * Validates the PSU-GEO-Location header for consent creation and signing basket requests.
+     * Validates the PSU-GEO-Location header with strict validation (MUST requirement).
+     * Use this method for endpoints where the header is mandatory.
+     * For signing basket requests (SHOULD requirement), use validateSigningBasketHeader() instead.
      * 
      * @param psuGeoLocation the value of PSU-GEO-Location header
-     * @throws IllegalArgumentException if the header is invalid
+     * @throws IllegalArgumentException if the header is missing or invalid
      */
     public void validateHeader(String psuGeoLocation) {
         if (psuGeoLocation == null || psuGeoLocation.trim().isEmpty()) {
