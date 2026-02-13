@@ -30,6 +30,8 @@ tags:
   name: Authorize
 - description: APIs for handling accelerator errors
   name: Error Handling
+- description: APIs for signing-baskets management
+  name: Signing Baskets
 paths:
   /map-accelerator-error-response:
     post:
@@ -1393,8 +1395,97 @@ paths:
       - application/json
       x-tags:
       - tag: Event Polling
+  /v1/signing-baskets/{basketId}/status:
+    get:
+      operationId: getSigningBasketStatus
+      parameters:
+      - description: Identifier of the signing basket
+        example: 3dc3d5b3-7023-4848-9853-f5400a64e80f
+        explode: false
+        in: path
+        name: basketId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                basketId: 3dc3d5b3-7023-4848-9853-f5400a64e80f
+                transactionStatus: ACTC
+              schema:
+                $ref: "#/components/schemas/SigningBasketStatusResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              example:
+                responseId: Ec1wMjmiG8
+                status: ERROR
+                errorMessage: invalid_request
+                errorDescription: Invalid basket ID format
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              example:
+                responseId: Ec1wMjmiG8
+                status: ERROR
+                errorMessage: not_found
+                errorDescription: Signing basket not found
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "500":
+          content:
+            application/json:
+              example:
+                responseId: Ec1wMjmiG8
+                status: ERROR
+                errorMessage: server_error
+                errorDescription: Failed to retrieve signing basket status
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Server Error
+      summary: Get signing basket status
+      tags:
+      - Signing Baskets
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Signing Baskets
 components:
   schemas:
+    SigningBasketStatusResponse:
+      description: Response containing the status of a signing basket
+      example:
+        basketId: 3dc3d5b3-7023-4848-9853-f5400a64e80f
+        transactionStatus: ACTC
+      properties:
+        basketId:
+          description: Identifier of the signing basket
+          type: string
+        transactionStatus:
+          description: The transaction status of the signing basket
+          enum:
+          - RCVD
+          - PATC
+          - ACTC
+          - ACCP
+          - ACSC
+          - ACSP
+          - PDNG
+          - RJCT
+          - CANC
+          type: string
+      required:
+      - basketId
+      - transactionStatus
+      type: object
     Response200ForErrorMapper:
       example:
         data: "{}"
