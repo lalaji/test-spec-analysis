@@ -30,6 +30,8 @@ tags:
   name: Authorize
 - description: APIs for handling accelerator errors
   name: Error Handling
+- description: APIs for managing standing orders with Berlin Group compliance
+  name: Standing Orders
 paths:
   /map-accelerator-error-response:
     post:
@@ -1393,6 +1395,139 @@ paths:
       - application/json
       x-tags:
       - tag: Event Polling
+  /standing-orders:
+    post:
+      summary: Create a new standing order
+      description: Creates a new standing order with structured additional information as per Berlin Group specification
+      tags:
+        - Standing Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StandingOrderCreationRequest"
+            example:
+              requestId: "SO123456"
+              data:
+                standingOrderDetails:
+                  startDate: "2026-03-01"
+                  endDate: "2027-03-01"
+                  executionRule: "FNAL"
+                  frequency: "MNTH"
+                  dayOfExecution: 15
+                  additionalInformationStructured:
+                    currency: "EUR"
+                    amount: 100.50
+                    creditorName: "Electricity Company"
+                    creditorAccount:
+                      iban: "DE89370400440532013000"
+                    debtorAccount:
+                      iban: "DE40100100103307118608"
+                    remittanceInformationUnstructured: "Monthly payment"
+      responses:
+        "201":
+          description: Standing order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandingOrderCreationResponse"
+              example:
+                responseId: "SO123456"
+                status: "SUCCESS"
+                data:
+                  standingOrderId: "SO-2026-001"
+                  standingOrderDetails:
+                    startDate: "2026-03-01"
+                    endDate: "2027-03-01"
+                    executionRule: "FNAL"
+                    frequency: "MNTH"
+                    dayOfExecution: 15
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+    get:
+      summary: List all standing orders
+      description: Retrieves a list of all standing orders
+      tags:
+        - Standing Orders
+      responses:
+        "200":
+          description: List of standing orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandingOrderListResponse"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-accepts:
+        - application/json
+  /standing-orders/{standingOrderId}:
+    get:
+      summary: Retrieve a specific standing order
+      description: Retrieves details of a specific standing order by ID
+      tags:
+        - Standing Orders
+      parameters:
+        - name: standingOrderId
+          in: path
+          required: true
+          description: The unique identifier of the standing order
+          schema:
+            type: string
+          example: "SO-2026-001"
+      responses:
+        "200":
+          description: Standing order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandingOrderResponse"
+              example:
+                responseId: "SO123456"
+                status: "SUCCESS"
+                data:
+                  standingOrderId: "SO-2026-001"
+                  standingOrderDetails:
+                    startDate: "2026-03-01"
+                    endDate: "2027-03-01"
+                    executionRule: "FNAL"
+                    frequency: "MNTH"
+                    dayOfExecution: 15
+                    additionalInformationStructured:
+                      currency: "EUR"
+                      amount: 100.50
+                      creditorName: "Electricity Company"
+        "404":
+          description: Standing order not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-accepts:
+        - application/json
 components:
   schemas:
     Response200ForErrorMapper:
@@ -2963,6 +3098,12 @@ components:
         id: id
         fileContent: fileContent
         status: status
+        standingOrderDetails:
+          startDate: "2026-03-01"
+          endDate: "2027-03-01"
+          executionRule: "FNAL"
+          frequency: "MNTH"
+          dayOfExecution: 15
       properties:
         id:
           type: string
@@ -2995,6 +3136,8 @@ components:
           type: array
         fileContent:
           type: string
+        standingOrderDetails:
+          $ref: "#/components/schemas/StandingOrderDetails"
       type: object
     Authorization:
       example:
@@ -3801,6 +3944,212 @@ components:
       required:
       - accounts
       type: object
+    StandingOrderDetails:
+      description: Standing order details as per Berlin Group specification
+      type: object
+      required:
+        - startDate
+        - frequency
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: The date on which the first payment of the standing order is initiated (ISO 8601 format)
+          example: "2026-03-01"
+        endDate:
+          type: string
+          format: date
+          description: The date of the last payment of the standing order (ISO 8601 format, optional)
+          example: "2027-03-01"
+        executionRule:
+          type: string
+          description: Execution rule for the standing order
+          enum:
+            - ODFIND
+            - FNAL
+            - PREC
+          example: "FNAL"
+        frequency:
+          type: string
+          description: Frequency of the standing order execution
+          enum:
+            - DAIL
+            - WEEK
+            - TOWK
+            - MNTH
+            - TOMN
+            - QUTR
+            - SEMI
+            - YEAR
+          example: "MNTH"
+        dayOfExecution:
+          type: integer
+          format: int32
+          description: Day of month for execution (1-31)
+          minimum: 1
+          maximum: 31
+          example: 15
+        additionalInformationStructured:
+          type: object
+          description: Additional structured information for standing order
+          properties:
+            currency:
+              type: string
+              description: Currency code (ISO 4217)
+              example: "EUR"
+            amount:
+              type: number
+              format: double
+              description: Amount for each standing order execution
+              example: 100.50
+            creditorName:
+              type: string
+              description: Name of the creditor
+              example: "Electricity Company"
+            creditorAccount:
+              type: object
+              description: Creditor account details
+              properties:
+                iban:
+                  type: string
+                  description: IBAN of the creditor account
+                  example: "DE89370400440532013000"
+            debtorAccount:
+              type: object
+              description: Debtor account details
+              properties:
+                iban:
+                  type: string
+                  description: IBAN of the debtor account
+                  example: "DE40100100103307118608"
+            remittanceInformationUnstructured:
+              type: string
+              description: Unstructured remittance information
+              example: "Monthly payment"
+      example:
+        startDate: "2026-03-01"
+        endDate: "2027-03-01"
+        executionRule: "FNAL"
+        frequency: "MNTH"
+        dayOfExecution: 15
+        additionalInformationStructured:
+          currency: "EUR"
+          amount: 100.50
+          creditorName: "Electricity Company"
+          creditorAccount:
+            iban: "DE89370400440532013000"
+          debtorAccount:
+            iban: "DE40100100103307118608"
+          remittanceInformationUnstructured: "Monthly payment"
+    StandingOrderCreationRequest:
+      type: object
+      required:
+        - requestId
+        - data
+      properties:
+        requestId:
+          type: string
+          description: A unique correlation identifier
+          example: "SO123456"
+        data:
+          type: object
+          required:
+            - standingOrderDetails
+          properties:
+            standingOrderDetails:
+              $ref: "#/components/schemas/StandingOrderDetails"
+    StandingOrderCreationResponse:
+      type: object
+      required:
+        - responseId
+        - status
+      properties:
+        responseId:
+          type: string
+          description: Correlation identifier matching the request
+          example: "SO123456"
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - ERROR
+          description: Status of the operation
+        data:
+          type: object
+          properties:
+            standingOrderId:
+              type: string
+              description: Unique identifier for the created standing order
+              example: "SO-2026-001"
+            standingOrderDetails:
+              $ref: "#/components/schemas/StandingOrderDetails"
+        errorCode:
+          type: integer
+          description: Error code if status is ERROR
+        errorMessage:
+          type: string
+          description: Error message if status is ERROR
+    StandingOrderResponse:
+      type: object
+      required:
+        - responseId
+        - status
+      properties:
+        responseId:
+          type: string
+          description: Unique response identifier
+          example: "SO123456"
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - ERROR
+          description: Status of the operation
+        data:
+          type: object
+          properties:
+            standingOrderId:
+              type: string
+              description: Unique identifier of the standing order
+              example: "SO-2026-001"
+            standingOrderDetails:
+              $ref: "#/components/schemas/StandingOrderDetails"
+        errorCode:
+          type: integer
+          description: Error code if status is ERROR
+        errorMessage:
+          type: string
+          description: Error message if status is ERROR
+    StandingOrderListResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - ERROR
+          description: Status of the operation
+        data:
+          type: object
+          properties:
+            standingOrders:
+              type: array
+              items:
+                type: object
+                properties:
+                  standingOrderId:
+                    type: string
+                    description: Unique identifier of the standing order
+                  standingOrderDetails:
+                    $ref: "#/components/schemas/StandingOrderDetails"
+        errorCode:
+          type: integer
+          description: Error code if status is ERROR
+        errorMessage:
+          type: string
+          description: Error message if status is ERROR
   securitySchemes:
     BasicAuth:
       scheme: basic
