@@ -7,13 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Simple test runner to validate XML files
+ * Command-line utility to validate XML files against ISO 20022 pain.001.001.03 schema
  */
-public class ManualValidationTest {
+public class ValidationCli {
     
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Usage: java ManualValidationTest <xml-file-path>");
+            System.out.println("Usage: java ValidationCli <xml-file-path>");
             System.exit(1);
         }
         
