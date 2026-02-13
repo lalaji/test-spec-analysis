@@ -30,6 +30,8 @@ tags:
   name: Authorize
 - description: APIs for handling accelerator errors
   name: Error Handling
+- description: APIs for payment authorization flow extensions
+  name: Payment
 paths:
   /map-accelerator-error-response:
     post:
@@ -1080,6 +1082,110 @@ paths:
       x-accepts:
       - application/json
       x-tags:
+      - tag: Authorize
+  /v1/{payment-service}/{paymentProduct}/{paymentId}/authorisations/{authorisationId}:
+    put:
+      operationId: updatePaymentAuthorisation
+      parameters:
+      - description: Payment service (e.g., payments, bulk-payments, periodic-payments)
+        example: payments
+        in: path
+        name: payment-service
+        required: true
+        schema:
+          type: string
+      - description: Payment product (e.g., sepa-credit-transfers, instant-sepa-credit-transfers,
+          target-2-payments, cross-border-credit-transfers)
+        example: sepa-credit-transfers
+        in: path
+        name: paymentProduct
+        required: true
+        schema:
+          type: string
+      - description: Resource identification of the generated payment initiation resource
+        example: 1234-wertiq-983
+        in: path
+        name: paymentId
+        required: true
+        schema:
+          type: string
+      - description: Resource identification of the related SCA
+        example: 123auth456
+        in: path
+        name: authorisationId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            examples:
+              UpdatePaymentAuthorisation:
+                summary: Update Payment Authorisation with Auth Code
+                value:
+                  requestId: Ec1wMjmiG8
+                  data:
+                    authenticationMethodId: myAuthenticationID
+                    scaAuthenticationData: "123456"
+            schema:
+              $ref: "#/components/schemas/UpdatePaymentAuthorisationRequestBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                successExample:
+                  summary: Success response
+                  value:
+                    responseId: Ec1wMjmiG8
+                    status: SUCCESS
+                    data:
+                      scaStatus: finalised
+                      authorisationId: 123auth456
+                failedExample:
+                  summary: Failed response
+                  value:
+                    responseId: Ec1wMjmiG8
+                    status: ERROR
+                    errorCode: 401
+                    errorMessage: invalid_authentication
+                    errorDescription: The authentication data provided is invalid
+              schema:
+                $ref: "#/components/schemas/Response200ForUpdatePaymentAuthorisation"
+          description: Successful response
+        "400":
+          content:
+            application/json:
+              example:
+                responseId: Ec1wMjmiG8
+                status: ERROR
+                errorMessage: invalid_request
+                errorDescription: Request data is invalid or missing
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "500":
+          content:
+            application/json:
+              example:
+                responseId: Ec1wMjmiG8
+                status: ERROR
+                errorMessage: server_error
+                errorDescription: Failed to process the payment authorisation update
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Server Error
+      summary: Update payment initiation authorisation sub-resource data with authorization
+        code
+      tags:
+      - Payment
+      - Authorize
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Payment
       - tag: Authorize
   /validate-event-subscription:
     post:
@@ -2475,6 +2581,76 @@ components:
       properties:
         requestObject:
           type: object
+      type: object
+    UpdatePaymentAuthorisationRequestBody:
+      example:
+        data:
+          authenticationMethodId: myAuthenticationID
+          scaAuthenticationData: "123456"
+        requestId: Ec1wMjmiG8
+      properties:
+        requestId:
+          description: A unique correlation identifier
+          example: Ec1wMjmiG8
+          type: string
+        data:
+          $ref: "#/components/schemas/UpdatePaymentAuthorisationData"
+      required:
+      - data
+      - requestId
+      type: object
+    UpdatePaymentAuthorisationData:
+      description: Payment authorisation update data with authentication information
+      example:
+        authenticationMethodId: myAuthenticationID
+        scaAuthenticationData: "123456"
+      properties:
+        authenticationMethodId:
+          description: Identification of the authentication method
+          type: string
+        scaAuthenticationData:
+          description: SCA authentication data (e.g., OTP, authorization code)
+          type: string
+      type: object
+    Response200ForUpdatePaymentAuthorisation:
+      oneOf:
+      - $ref: "#/components/schemas/SuccessResponseUpdatePaymentAuthorisation"
+      - $ref: "#/components/schemas/FailedResponse"
+      x-one-of-name: Response200ForUpdatePaymentAuthorisation
+    SuccessResponseUpdatePaymentAuthorisation:
+      example:
+        data:
+          scaStatus: finalised
+          authorisationId: 123auth456
+        responseId: responseId
+        status: SUCCESS
+      properties:
+        responseId:
+          type: string
+        status:
+          enum:
+          - SUCCESS
+          type: string
+        data:
+          $ref: "#/components/schemas/SuccessResponseUpdatePaymentAuthorisationData"
+      required:
+      - data
+      - responseId
+      - status
+      type: object
+    SuccessResponseUpdatePaymentAuthorisationData:
+      description: Successful payment authorisation update data
+      example:
+        scaStatus: finalised
+        authorisationId: 123auth456
+      properties:
+        scaStatus:
+          description: Status of the SCA process (e.g., received, psuIdentified, psuAuthenticated,
+            scaMethodSelected, started, finalised, failed, exempted)
+          type: string
+        authorisationId:
+          description: Resource identification of the related SCA
+          type: string
       type: object
     Response200ForConsentRevocation:
       oneOf:
