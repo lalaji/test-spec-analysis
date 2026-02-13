@@ -146,9 +146,9 @@ mvn test -Dtest=*Validator*Test
 # Run specific test class
 mvn test -Dtest=GeoLocationValidatorTest
 
-# Manual verification
-javac -cp target/classes -d target/classes src/main/java/org/openapitools/validation/GeoLocationValidatorManualTest.java
-java -cp target/classes org.openapitools.validation.GeoLocationValidatorManualTest
+# Manual verification demo
+javac -cp target/classes -d target/classes src/test/java/org/openapitools/validation/GeoLocationValidatorDemo.java
+java -cp target/classes org.openapitools.validation.GeoLocationValidatorDemo
 ```
 
 ## Error Responses

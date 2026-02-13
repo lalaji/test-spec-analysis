@@ -1,9 +1,10 @@
 package org.openapitools.validation;
 
 /**
- * Simple test runner to verify GeoLocationValidator functionality
+ * Manual demonstration of GeoLocationValidator functionality.
+ * Run this class to verify validation behavior with various coordinate inputs.
  */
-public class GeoLocationValidatorManualTest {
+public class GeoLocationValidatorDemo {
     
     public static void main(String[] args) {
         System.out.println("Testing GeoLocationValidator...\n");

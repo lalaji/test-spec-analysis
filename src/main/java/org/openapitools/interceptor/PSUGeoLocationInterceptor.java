@@ -92,13 +92,22 @@ public class PSUGeoLocationInterceptor implements HandlerInterceptor {
     
     /**
      * Sends an error response with the given status code and message.
+     * Uses proper JSON serialization to prevent injection vulnerabilities.
      */
     private void sendErrorResponse(HttpServletResponse response, int statusCode, String message) 
             throws IOException {
         response.setStatus(statusCode);
         response.setContentType("application/json");
+        
+        // Escape message to prevent JSON injection
+        String escapedMessage = message
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
+        
         response.getWriter().write(String.format(
                 "{\"status\":\"ERROR\",\"errorMessage\":\"invalid_header\",\"errorDescription\":\"%s\"}", 
-                message));
+                escapedMessage));
     }
 }
