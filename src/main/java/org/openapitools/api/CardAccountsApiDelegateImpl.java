@@ -37,13 +37,16 @@ public class CardAccountsApiDelegateImpl implements CardAccountsApiDelegate {
 
         CardTransactionList transactionList = new CardTransactionList();
 
+        // Default to "both" if bookingStatus is null
+        String status = (bookingStatus == null) ? "both" : bookingStatus;
+
         // Add booked transactions if requested
-        if ("booked".equals(bookingStatus) || "both".equals(bookingStatus)) {
+        if ("booked".equals(status) || "both".equals(status)) {
             transactionList.setBooked(createSampleBookedTransactions(dateFrom, dateTo));
         }
 
         // Add pending transactions if requested
-        if ("pending".equals(bookingStatus) || "both".equals(bookingStatus)) {
+        if ("pending".equals(status) || "both".equals(status)) {
             transactionList.setPending(createSamplePendingTransactions());
         }
 
@@ -93,13 +96,8 @@ public class CardAccountsApiDelegateImpl implements CardAccountsApiDelegate {
         if (dateFrom != null || dateTo != null) {
             bookedTransactions.removeIf(txn -> {
                 LocalDate txnDate = txn.getBookingDate();
-                if (dateFrom != null && txnDate.isBefore(dateFrom)) {
-                    return true;
-                }
-                if (dateTo != null && txnDate.isAfter(dateTo)) {
-                    return true;
-                }
-                return false;
+                return (dateFrom != null && txnDate.isBefore(dateFrom)) || 
+                       (dateTo != null && txnDate.isAfter(dateTo));
             });
         }
 

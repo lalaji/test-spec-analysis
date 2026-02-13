@@ -3926,7 +3926,7 @@ components:
       properties:
         cardAccountId:
           type: string
-          description: The unique identifier of the card account
+          description: The unique identifier of the card account (typically a UUID format)
           example: "3dc3d5b3-7023-4848-9853-f5400a64e80f"
         transactions:
           $ref: "#/components/schemas/CardTransactionList"
@@ -4006,7 +4006,7 @@ components:
           pattern: "^[A-Z]{3}$"
         amount:
           type: string
-          description: Transaction amount as a decimal string
+          description: Transaction amount as a decimal string. Negative values are supported for refunds and reversals.
           example: "256.67"
           pattern: "^-?[0-9]{1,14}(\\.[0-9]{1,5})?$"
   securitySchemes:
