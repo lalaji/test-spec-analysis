@@ -16,7 +16,7 @@ public class FailedResponse {
   private String responseId;
 
   @JsonProperty("status")
-  private String status;
+  private ErrorStatusEnum status;
 
   @JsonProperty("errorCode")
   private Integer errorCode;
@@ -30,6 +30,7 @@ public class FailedResponse {
   }
 
   @Schema(description = "")
+  @NotNull
   public String getResponseId() {
     return responseId;
   }
@@ -38,17 +39,18 @@ public class FailedResponse {
     this.responseId = responseId;
   }
 
-  public FailedResponse status(String status) {
+  public FailedResponse status(ErrorStatusEnum status) {
     this.status = status;
     return this;
   }
 
   @Schema(description = "Indicates the outcome of the request. For a failed operation, this should be set to ERROR.")
-  public String getStatus() {
+  @NotNull
+  public ErrorStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(ErrorStatusEnum status) {
     this.status = status;
   }
 
@@ -58,6 +60,7 @@ public class FailedResponse {
   }
 
   @Schema(description = "If any HTTP error code to return.")
+  @NotNull
   public Integer getErrorCode() {
     return errorCode;
   }
@@ -71,7 +74,8 @@ public class FailedResponse {
     return this;
   }
 
-  @Schema(description = ":\"Custom error object to response back\"")
+  @Schema(description = "Custom error object to response back")
+  @NotNull
   public Object getData() {
     return data;
   }

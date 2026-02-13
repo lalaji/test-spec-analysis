@@ -16,7 +16,7 @@ public class SuccessResponseUpdatePaymentAuthorisation {
   private String responseId;
 
   @JsonProperty("status")
-  private String status;
+  private StatusEnum status;
 
   @JsonProperty("data")
   private SuccessResponseUpdatePaymentAuthorisationData data;
@@ -36,18 +36,18 @@ public class SuccessResponseUpdatePaymentAuthorisation {
     this.responseId = responseId;
   }
 
-  public SuccessResponseUpdatePaymentAuthorisation status(String status) {
+  public SuccessResponseUpdatePaymentAuthorisation status(StatusEnum status) {
     this.status = status;
     return this;
   }
 
   @Schema(description = "")
   @NotNull
-  public String getStatus() {
+  public StatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(StatusEnum status) {
     this.status = status;
   }
 

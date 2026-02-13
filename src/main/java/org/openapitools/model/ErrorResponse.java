@@ -13,23 +13,23 @@ import javax.annotation.Generated;
 public class ErrorResponse {
 
   @JsonProperty("status")
-  private String status;
+  private ErrorStatusEnum status;
 
   @JsonProperty("data")
   private Object data;
 
-  public ErrorResponse status(String status) {
+  public ErrorResponse status(ErrorStatusEnum status) {
     this.status = status;
     return this;
   }
 
   @Schema(description = "Indicates the outcome of the request. For an error operation, this should be set to ERROR.")
   @NotNull
-  public String getStatus() {
+  public ErrorStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(ErrorStatusEnum status) {
     this.status = status;
   }
 
@@ -38,7 +38,7 @@ public class ErrorResponse {
     return this;
   }
 
-  @Schema(description = ":\"Custom error object to response back\"")
+  @Schema(description = "Custom error object to response back")
   @NotNull
   public Object getData() {
     return data;

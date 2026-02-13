@@ -16,7 +16,7 @@ public class SuccessResponse {
   private String responseId;
 
   @JsonProperty("status")
-  private String status;
+  private StatusEnum status;
 
   public SuccessResponse responseId(String responseId) {
     this.responseId = responseId;
@@ -33,18 +33,18 @@ public class SuccessResponse {
     this.responseId = responseId;
   }
 
-  public SuccessResponse status(String status) {
+  public SuccessResponse status(StatusEnum status) {
     this.status = status;
     return this;
   }
 
   @Schema(description = "")
   @NotNull
-  public String getStatus() {
+  public StatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(StatusEnum status) {
     this.status = status;
   }
 
