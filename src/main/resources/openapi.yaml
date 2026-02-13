@@ -3985,7 +3985,7 @@ components:
         dayOfExecution:
           type: integer
           format: int32
-          description: Day of month for execution (1-31)
+          description: "Day of month for execution (1-31). If the value exceeds the number of days in a month (e.g., 31 for February), the execution occurs on the last day of that month in accordance with the executionRule."
           minimum: 1
           maximum: 31
           example: 15
