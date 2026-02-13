@@ -116,10 +116,19 @@ public class SpecificationLicenseService {
 
     /**
      * Update metadata with custom values
+     * Note: This will preserve existing changes. If you want to replace all data including changes,
+     * set the changes list on the newMetadata before calling this method.
      * 
      * @param newMetadata The new metadata to set
      */
     public void updateMetadata(SpecificationMetadata newMetadata) {
-        this.metadata = newMetadata;
+        // Preserve existing changes if the new metadata doesn't have any
+        if (newMetadata.getChanges() == null || newMetadata.getChanges().isEmpty()) {
+            List<SpecificationChange> existingChanges = this.metadata.getChanges();
+            this.metadata = newMetadata;
+            this.metadata.setChanges(existingChanges);
+        } else {
+            this.metadata = newMetadata;
+        }
     }
 }

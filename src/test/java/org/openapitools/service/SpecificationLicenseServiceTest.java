@@ -109,6 +109,34 @@ public class SpecificationLicenseServiceTest {
     }
 
     @Test
+    public void testUpdateMetadataPreservesChanges() {
+        // Add some changes first
+        service.addChange("Change 1", "User 1", "addition", "Section 1");
+        service.addChange("Change 2", "User 2", "modification", "Section 2");
+        
+        assertEquals(2, service.getChanges().size());
+        
+        // Update metadata without specifying changes
+        SpecificationMetadata newMetadata = new SpecificationMetadata()
+            .specificationName("Updated Spec")
+            .version("v2.0")
+            .licenseName("Apache 2.0")
+            .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+            .attributionText("Test attribution")
+            .redistributionAllowed(true)
+            .commercialUseAllowed(true);
+        
+        service.updateMetadata(newMetadata);
+        
+        // Verify metadata was updated
+        assertEquals("Updated Spec", service.getMetadata().getSpecificationName());
+        assertEquals("v2.0", service.getMetadata().getVersion());
+        
+        // Verify changes were preserved
+        assertEquals(2, service.getChanges().size());
+    }
+
+    @Test
     public void testNonCompliantMetadata() {
         SpecificationMetadata incompleteMetadata = new SpecificationMetadata()
             .specificationName("Test")
