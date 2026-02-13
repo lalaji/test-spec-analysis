@@ -1,0 +1,29 @@
+specificationId: "berlin-group"
+specificationName: "Berlin Group NextGenPSD2 Framework"
+version: "1.3.11"
+description: "Implementation Guide for PSD2 Access to Bank Accounts"
+redistributionAllowed: true
+originalSourceUrl: "https://www.berlin-group.org/nextgenpsd2-downloads"
+
+license:
+  name: "Creative Commons Attribution 4.0 International"
+  url: "https://creativecommons.org/licenses/by/4.0/"
+  type: "CC-BY-4.0"
+  allowsCommercialUse: true
+  requiresAttribution: true
+
+attribution:
+  organizationName: "Berlin Group"
+  organizationUrl: "https://www.berlin-group.org"
+  specificationName: "NextGenPSD2 XS2A Framework"
+  attributionText: "This implementation is based on the Berlin Group NextGenPSD2 Framework. Original specification © Berlin Group. Used under Creative Commons Attribution 4.0 International License."
+
+changes:
+  - changeDate: "2024-01-15"
+    changeDescription: "Adapted for WSO2 Open Banking toolkit integration"
+    changeAuthor: "WSO2"
+    changeType: "Implementation"
+  - changeDate: "2024-02-01"
+    changeDescription: "Added extension points for identity server integration"
+    changeAuthor: "WSO2"
+    changeType: "Enhancement"
