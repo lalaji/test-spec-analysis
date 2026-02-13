@@ -461,24 +461,6 @@ paths:
       - tag: Application
   /pre-process-consent-creation:
     post:
-      parameters:
-      - name: PSU-Geo-Location
-        in: header
-        description: |
-          The geographical location of the PSU as provided by the TPP. 
-          Format: GEO:latitude;longitude (e.g., GEO:52.506931;13.144558)
-          
-          Validation rules enforced by backend:
-          - Latitude must be between -90 and 90 degrees
-          - Longitude must be between -180 and 180 degrees
-          - Format is case-insensitive
-          
-          Note: While the regex pattern validates the format, range validation is performed by the backend.
-        required: false
-        schema:
-          type: string
-          pattern: '^GEO:(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)$'
-          example: 'GEO:52.506931;13.144558'
       requestBody:
         content:
           application/json:
@@ -888,24 +870,6 @@ paths:
       - tag: Consent
   /persist-authorized-consent:
     post:
-      parameters:
-      - name: PSU-Geo-Location
-        in: header
-        description: |
-          The geographical location of the PSU as provided by the TPP. 
-          Format: GEO:latitude;longitude (e.g., GEO:52.506931;13.144558)
-          
-          Validation rules enforced by backend:
-          - Latitude must be between -90 and 90 degrees
-          - Longitude must be between -180 and 180 degrees
-          - Format is case-insensitive
-          
-          Note: While the regex pattern validates the format, range validation is performed by the backend.
-        required: false
-        schema:
-          type: string
-          pattern: '^GEO:(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)$'
-          example: 'GEO:52.506931;13.144558'
       requestBody:
         content:
           application/json:
@@ -954,24 +918,6 @@ paths:
       - tag: Consent
   /validate-consent-access:
     post:
-      parameters:
-      - name: PSU-Geo-Location
-        in: header
-        description: |
-          The geographical location of the PSU as provided by the TPP. 
-          Format: GEO:latitude;longitude (e.g., GEO:52.506931;13.144558)
-          
-          Validation rules enforced by backend:
-          - Latitude must be between -90 and 90 degrees
-          - Longitude must be between -180 and 180 degrees
-          - Format is case-insensitive
-          
-          Note: While the regex pattern validates the format, range validation is performed by the backend.
-        required: false
-        schema:
-          type: string
-          pattern: '^GEO:(-?\d+(\.\d+)?);(-?\d+(\.\d+)?)$'
-          example: 'GEO:52.506931;13.144558'
       requestBody:
         content:
           application/json:
